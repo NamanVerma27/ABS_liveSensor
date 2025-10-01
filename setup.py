@@ -1,7 +1,7 @@
 from setuptools import find_packages , setup
 
-def get_requirements() -> list(str):
-    requirements_list = list[str] = []
+def get_requirements() -> list[str]:
+    requirements_list: list[str] = [] # Correct in-function variable annotation
     return requirements_list
 
 setup(
