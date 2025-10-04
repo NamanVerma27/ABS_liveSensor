@@ -1,4 +1,5 @@
 from setuptools import find_packages , setup
+from typing import List
 
 def get_requirements() -> list[str]:
     requirements_list: list[str] = [] # Correct in-function variable annotation
@@ -11,5 +12,5 @@ setup(
     author_email="namanv417@gmail.com",
     packages = find_packages(),
 
-    install_requires = get_requirements()
+    install_requires = get_requirements() 
 )
