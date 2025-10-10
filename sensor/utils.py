@@ -1,7 +1,7 @@
 import pandas as pd
 from sensor.config import mongo_client
 
-def dump_csv_file_to_mongodv_collection(file_path:str , database_name:str, collection_name:str) -> None:
+def dump_csv_file_to_mongodb_collection(file_path:str , database_name:str, collection_name:str) -> None:
 
     try:
         # Read the CSV file into a DataFrame
@@ -18,7 +18,7 @@ def dump_csv_file_to_mongodv_collection(file_path:str , database_name:str, colle
             mongo_client[database_name][collection_name].insert_many(records)
             print(f"Inserted {len(records)} records into {database_name}.{collection_name}")
         
-        client.close()
+        mongo_client.close()
 
     except Exception as e:
         print(f"An error occurred: {e}")
