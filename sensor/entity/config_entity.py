@@ -19,8 +19,8 @@ class DataIngestionConfig:
         def __init__(self , training_pipeline_config : TrainingPipelineConfig):
             self.data_ingestion_dir = os.path.join(training_pipeline_config.artifact_dir , DATA_INGESTION_DIR_NAME)
             self.feature_store_file_path = os.path.join(self.data_ingestion_dir , DATA_INGESTION_FEATURE_STORE_DIR , FILE_NAME)
-            self.train_file_path = os.path.join(self.data_ingestion_dir , DATA_INGESTION_INGESTED_DIR , "train" , TRAIN_FILE_NAME)
-            self.test_file_path = os.path.join(self.data_ingestion_dir , DATA_INGESTION_INGESTED_DIR , "test" , TEST_FILE_NAME)
+            self.train_file_path = os.path.join(self.data_ingestion_dir , DATA_INGESTION_INGESTED_DIR , TRAIN_FILE_NAME)
+            self.test_file_path = os.path.join(self.data_ingestion_dir , DATA_INGESTION_INGESTED_DIR , TEST_FILE_NAME)
             self.test_size = DATA_INGESTION_TRAIN_TEST_SPLIT_RATION
             self.collection_name: str = DATA_INGESTION_COLLECTION_NAME
 

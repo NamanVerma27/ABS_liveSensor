@@ -23,7 +23,7 @@ SCHEMA_FILE_PATH = os.path.join("config" , "schema.yaml") # Path of the schema f
 SCHEMA_DROP_COLS = "drop_columns" # columns to be dropped during data cleaning
 
 # Data Ingestion related constant start with DATA_INGESTION VARIBLEs
-DATA_INGESTION_COLLECTION_NAME: str = "sensor" # collection name in mongodb
+DATA_INGESTION_COLLECTION_NAME: str = "sensor_data" # collection name in mongodb
 DATA_INGESTION_DIR_NAME: str = "data_ingestion" # folder name for data ingestion
 DATA_INGESTION_FEATURE_STORE_DIR: str = "feature_store" # folder name for feature store
 DATA_INGESTION_INGESTED_DIR: str = "ingested" # folder name for ingested data
