@@ -6,6 +6,9 @@ from sklearn.model_selection import train_test_split
 from sensor.logger import logging
 from sensor.exception import SensorException
 
+from sensor.utils.main_utils import read_yaml_file , write_yaml_file
+from sensor.constant.training_pipeline import SCHEMA_FILE_PATH , SCHEMA_DROP_COLS
+
 from sensor.constant.database import COLLECTION_NAME
 from sensor.entity.config_entity import DataIngestionConfig
 from sensor.entity.artifact_entity import DataIngestionArtifact
@@ -65,6 +68,9 @@ class DataIngesion:
     def initiate_data_ingestion(self) -> DataIngestionArtifact:
         try:
             dataframe = self.export_data_into_feaure_store()
+
+            # dropping the columns
+            dataframe.drop(SCHEMA_DROP_COLS , axis = 1 , inplace = True)
 
             self.split_data_as_train_test(dataframe = dataframe)
 
