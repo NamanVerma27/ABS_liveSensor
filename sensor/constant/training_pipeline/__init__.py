@@ -28,3 +28,10 @@ DATA_INGESTION_DIR_NAME: str = "data_ingestion" # folder name for data ingestion
 DATA_INGESTION_FEATURE_STORE_DIR: str = "feature_store" # folder name for feature store
 DATA_INGESTION_INGESTED_DIR: str = "ingested" # folder name for ingested data
 DATA_INGESTION_TRAIN_TEST_SPLIT_RATION: float = 0.2 # train test split ratio
+
+# Data Validation related constant start with DATA_VALIDATION VARIBLEs
+DATA_VALIDATION_DIR_NAME: str = "data_validation" # folder name for data validation
+DATA_VALIDATION_VALID_DIR: str = "validated" # folder name for validated data
+DATA_VALIDATION_INVALID_DIR: str = "invalid" # folder name for invalid data
+DATA_VALIDATION_DRIFT_REPORT_DIR: str = "drift_report" # folder name for drift report
+DATA_VALIDATION_DRIFT_REPORT_FILE_NAME: str = "report.yaml" # file name for drift report
