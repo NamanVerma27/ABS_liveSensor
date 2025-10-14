@@ -2,7 +2,6 @@ import os,sys
 
 from pandas import DataFrame
 from scipy.stats import ks_2samp
-from dataclasses import dataclass
 
 from sensor.logger import logging
 from sensor.exception import SensorException
@@ -44,6 +43,13 @@ class DataValidation:
             return True
         except Exception as e:
             raise SensorException(e, sys)
+        
+        @staticmethod
+        def read_data(file_path)->pd.DataFrame:
+            try:
+                return pd.read_csv(file_path)
+            except Exception as e:
+                raise SensorException(e,sys)
     
     def detect_data_drift(self, base_df, current_df, threshold: float = 0.05) -> bool:
         try:
@@ -70,56 +76,92 @@ class DataValidation:
         except Exception as e:
             raise SensorException(e, sys)
         
-    def initiate_data_validation(self) -> DataValidationArtifact:
-        try:
-            logging.info("Starting data validation")
-            train_file_path = self.data_ingestion_artifact.training_file_path
-            test_file_path = self.data_ingestion_artifact.test_file_path
+def initiate_data_validation(self) -> DataValidationArtifact:
+    try:
+        logging.info("Starting data validation process.")
+        
+        # --- 1. Get file paths and read data ---
+        train_file_path = self.data_ingestion_artifact.trained_file_path
+        test_file_path = self.data_ingestion_artifact.test_file_path
+
+        # Assuming DataValidation.read_data returns a DataFrame-like object
+        train_dataframe = self.read_data(train_file_path)
+        test_dataframe = self.read_data(test_file_path)
+
+        # --- 2. Validation Checks (Using Direct Exception Raising for Clarity) ---
+        
+        # 2.1 Validate number of columns
+        if not self.validate_number_of_columns(dataframe=train_dataframe):
+            raise SensorException("Training data does not have the required number of columns.", sys)
+        logging.info("Training data: Number of columns validated successfully.")
+
+        if not self.validate_number_of_columns(dataframe=test_dataframe):
+            raise SensorException("Testing data does not have the required number of columns.", sys)
+        logging.info("Testing data: Number of columns validated successfully.")
+
+        # 2.2 Validate numerical columns
+        if not self.is_numerical_column_exist(dataframe=train_dataframe):
+            raise SensorException("Training data is missing required numerical columns.", sys)
+        logging.info("Training data: Numerical columns validated successfully.")
+
+        if not self.is_numerical_column_exist(dataframe=test_dataframe):
+            raise SensorException("Testing data is missing required numerical columns.", sys)
+        logging.info("Testing data: Numerical columns validated successfully.")
+        
+        # --- 3. Detect Data Drift ---
+        drift_detected = self.detect_data_drift(base_df=train_dataframe, current_df=test_dataframe)
+
+        # Set validation_status based on drift detection
+        validation_status = not drift_detected
+
+        if drift_detected:
+            logging.warning("Data drift detected between training and testing datasets.")
+        else:
+            logging.info("No data drift detected between training and testing datasets.")
+        
+        # --- 4. Prepare and Save Artifacts ---
+        os.makedirs(self.data_validation_config.valid_data_dir, exist_ok=True)
+        os.makedirs(self.data_validation_config.invalid_data_dir, exist_ok=True)
+        
+        # Initialize artifact paths
+        valid_train_file_path = None
+        valid_test_file_path = None
+        invalid_train_file_path = None
+        invalid_test_file_path = None
+
+        if validation_status:
+            # Use the pre-calculated paths from the config object
+            valid_train_file_path = self.data_validation_config.valid_train_file_path
+            valid_test_file_path = self.data_validation_config.valid_test_file_path
             
-            train_dataframe = DataFrame.from_csv(train_file_path)
-            test_dataframe = DataFrame.from_csv(test_file_path)
-            
-            # Validate number of columns
-            if not self.validate_number_of_columns(train_dataframe):
-                raise SensorException("Training data does not have the required number of columns", sys)
-            if not self.validate_number_of_columns(test_dataframe):
-                raise SensorException("Testing data does not have the required number of columns", sys)
-            
-            # Validate numerical columns
-            if not self.is_numerical_column_exist(train_dataframe):
-                raise SensorException("Training data is missing required numerical columns", sys)
-            if not self.is_numerical_column_exist(test_dataframe):
-                raise SensorException("Testing data is missing required numerical columns", sys)
-            
-            # Detect data drift
-            drift_detected = self.detect_data_drift(train_dataframe, test_dataframe)
-            if drift_detected:
-                logging.info("Data drift detected between training and testing datasets")
-            else:
-                logging.info("No data drift detected between training and testing datasets")
-            
-            # Prepare artifact
-            valid_train_file_path = os.path.join(self.data_validation_config.valid_data_dir, TRAIN_FILE_NAME)
-            valid_test_file_path = os.path.join(self.data_validation_config.valid_data_dir, TEST_FILE_NAME)
-            invalid_train_file_path = os.path.join(self.data_validation_config.invalid_data_dir, TRAIN_FILE_NAME)
-            invalid_test_file_path = os.path.join(self.data_validation_config.invalid_data_dir, TEST_FILE_NAME)
-            
-            os.makedirs(os.path.dirname(valid_train_file_path), exist_ok=True)
-            os.makedirs(os.path.dirname(invalid_train_file_path), exist_ok=True)
-            
+            # Save the data to the VALID location
             train_dataframe.to_csv(valid_train_file_path, index=False, header=True)
             test_dataframe.to_csv(valid_test_file_path, index=False, header=True)
+            logging.info(f"Data saved to valid directory: {self.data_validation_config.valid_data_dir}")
             
-            data_validation_artifact = DataValidationArtifact(
-                validation_status=not drift_detected,
-                valid_train_file_path=valid_train_file_path,
-                valid_test_file_path=valid_test_file_path,
-                invalid_train_file_path=invalid_train_file_path,
-                invalid_test_file_path=invalid_test_file_path,
-                drift_report_file_path=self.data_validation_config.drift_report_file_path
-            )
-            
-            logging.info(f"Data validation artifact: {data_validation_artifact}")
-            return data_validation_artifact
-        except Exception as e:
-            raise SensorException(e, sys)
+        else:
+            # Use the pre-calculated paths from the config object
+            invalid_train_file_path = self.data_validation_config.invalid_train_file_path
+            invalid_test_file_path = self.data_validation_config.invalid_test_file_path
+
+            # Save the data to the INVALID location
+            train_dataframe.to_csv(invalid_train_file_path, index=False, header=True)
+            test_dataframe.to_csv(invalid_test_file_path, index=False, header=True)
+            logging.info(f"Data saved to invalid directory due to drift: {self.data_validation_config.invalid_data_dir}")
+
+        # --- 5. Create and Return Artifact ---
+        data_validation_artifact = DataValidationArtifact(
+            validation_status=validation_status,
+            valid_train_file_path=valid_train_file_path,
+            valid_test_file_path=valid_test_file_path,
+            invalid_train_file_path=invalid_train_file_path,
+            invalid_test_file_path=invalid_test_file_path,
+            drift_report_file_path=self.data_validation_config.drift_report_file_path,
+        )
+
+        logging.info(f"Data validation artifact created: {data_validation_artifact}")
+
+        return data_validation_artifact
+
+    except Exception as e:
+        raise SensorException(e, sys)
