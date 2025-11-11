@@ -1,5 +1,5 @@
 from setuptools import find_packages , setup
-from typing import List
+from typing import list
 
 def get_requirements() -> list[str]:
     requirements_list: list[str] = [] # Correct in-function variable annotation
