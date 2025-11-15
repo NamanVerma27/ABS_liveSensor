@@ -14,3 +14,9 @@ class DataValidationArtifact: # significance - holds file paths and status for d
     invalid_train_file_path: str
     invalid_test_file_path: str
     drift_report_file_path: str
+
+@dataclass
+class DataPreprocessingArtifact: # significance - holds file paths for preprocessed data and preprocessing object
+    preprocessed_object_file_path: str
+    processed_train_file_path: str
+    processed_test_file_path: str
