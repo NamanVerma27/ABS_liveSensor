@@ -35,3 +35,8 @@ DATA_VALIDATION_VALID_DIR: str = "validated" # folder name for validated data
 DATA_VALIDATION_INVALID_DIR: str = "invalid" # folder name for invalid data
 DATA_VALIDATION_DRIFT_REPORT_DIR: str = "drift_report" # folder name for drift report
 DATA_VALIDATION_DRIFT_REPORT_FILE_NAME: str = "report.yaml" # file name for drift report
+
+# Data Preprocessing related constant start with DATA_PREPROCESSING VARIBLEs
+DATA_PREPROCESSING_DIR_NAME: str = "data_preprocessing" # folder name for data preprocessing
+DATA_PREPROCESSING_PROCESSED_DATA_DIR: str = "processed_data" # folder name for processed data
+DATA_PREPROCESSING_PROCESSED_OBJECT_DIR: str = "preprocessing_object" # folder name for preprocessor object
