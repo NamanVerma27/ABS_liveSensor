@@ -11,6 +11,9 @@ from sensor.entity.config_entity import DataValidationConfig
 from sensor.entity.artifact_entity import DataValidationArtifact
 from sensor.components.data_validation import DataValidation
 
+from sensor.entity.config_entity import DataPreprocessingConfig
+from sensor.entity.artifact_entity import DataPreprocessingArtifact
+
 class TrainPipeline:
     is_pipeline_running=False
     def __init__(self):
@@ -36,5 +39,17 @@ class TrainPipeline:
             )
             data_validation_artifact = data_validation.initiate_data_validation()
             return data_validation_artifact
+        except Exception as e:
+            raise SensorException(e, sys)
+        
+    def start_data_preprocessing(self, data_validation_artifact: DataValidationArtifact) -> DataPreprocessingArtifact:
+        try:
+            data_preprocessing_config = DataPreprocessingConfig(training_pipeline_config=self.training_pipeline_config)
+            data_preprocessing= DataPreprocessing(
+                data_validation_artifact=data_validation_artifact,
+                data_preprocessing_config=data_preprocessing_config
+            )
+            data_preprocessing_artifact = data_preprocessing.initiate_data_preprocessing()
+            return data_preprocessing_artifact
         except Exception as e:
             raise SensorException(e, sys)
