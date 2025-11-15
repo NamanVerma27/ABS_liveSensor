@@ -50,3 +50,8 @@ class DataValidationConfig:
 class DataPreprocessingConfig:
     try:
         def __init__(self , training_pipeline_config : TrainingPipelineConfig):
+            self.data_preprocessing_dir = os.path.join(training_pipeline_config.artifact_dir , DATA_PREPROCESSING_DIR_NAME)
+            self.processed_data_dir =  os.path.join(self.data_preprocessing_dir , DATA_PREPROCESSING_PROCESSED_DATA_DIR)
+            self.processed_train_file_path = os.path.join(self.processed_data_dir , TRAIN_FILE_NAME.repace(".csv" , ".npy"))
+            self.processed_test_file_path = os.path.join(self.processed_data_dir , TEST_FILE_NAME.repace(".csv" , ".npy"))
+            self.preprocessed_object_dir = os.path.join(self.data_preprocessing_dir , DATA_PREPROCESSING_PROCESSED_OBJECT_DIR)
