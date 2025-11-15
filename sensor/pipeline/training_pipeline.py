@@ -13,6 +13,7 @@ from sensor.components.data_validation import DataValidation
 
 from sensor.entity.config_entity import DataPreprocessingConfig
 from sensor.entity.artifact_entity import DataPreprocessingArtifact
+from sensor.components.data_preprocessing import DataPreprocessing
 
 class TrainPipeline:
     is_pipeline_running=False
