@@ -15,6 +15,10 @@ from sensor.entity.config_entity import DataPreprocessingConfig
 from sensor.entity.artifact_entity import DataPreprocessingArtifact
 from sensor.components.data_preprocessing import DataPreprocessing
 
+from sensor.entity.config_entity import ModelTrainerConfig
+from sensor.entity.artifact_entity import ModelTrainerArtifact
+from sensor.components.model_trainer import ModelTrainer
+
 class TrainPipeline:
     is_pipeline_running=False
     def __init__(self):
@@ -52,5 +56,17 @@ class TrainPipeline:
             )
             data_preprocessing_artifact = data_preprocessing.initiate_data_preprocessing()
             return data_preprocessing_artifact
+        except Exception as e:
+            raise SensorException(e, sys)
+        
+    def start_model_trainer(self, data_preprocessing_artifact: DataPreprocessingArtifact) -> ModelTrainerArtifact:
+        try:
+            model_trainer_config = ModelTrainerConfig(training_pipeline_config=self.training_pipeline_config)
+            model_trainer = ModelTrainer(
+                data_preprocessing_artifact=data_preprocessing_artifact,
+                model_trainer_config=model_trainer_config
+            )
+            model_trainer_artifact = model_trainer.initiate_model_trainer()
+            return model_trainer_artifact
         except Exception as e:
             raise SensorException(e, sys)
