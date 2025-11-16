@@ -22,6 +22,12 @@ class DataPreprocessingArtifact: # significance - holds file paths for preproces
     processed_test_file_path: str
 
 @dataclass
+class ClassificationMetricArtifact:
+    f1_score: float
+    precision_score: float
+    recall_score: float
+
+@dataclass
 class ModelTrainerArtifact: # significance - holds file path for the trained model
     trained_model_file_path: str
     train_metric_artifact: ClassificationMetricArtifact
