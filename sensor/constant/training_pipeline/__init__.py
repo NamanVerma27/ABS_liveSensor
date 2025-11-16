@@ -40,3 +40,10 @@ DATA_VALIDATION_DRIFT_REPORT_FILE_NAME: str = "report.yaml" # file name for drif
 DATA_PREPROCESSING_DIR_NAME: str = "data_preprocessing" # folder name for data preprocessing
 DATA_PREPROCESSING_PROCESSED_DATA_DIR: str = "processed_data" # folder name for processed data
 DATA_PREPROCESSING_PROCESSED_OBJECT_DIR: str = "preprocessing_object" # folder name for preprocessor object
+
+# Model Trainer related constant start with MODEL_TRAINER VARIBLEs
+MODEL_TRAINER_DIR_NAME: str = "model_trainer" # folder name for model trainer
+MODEL_TRAINER_TRAINED_MODEL_DIR: str = "trained_model" # folder name for trained model
+MODEL_TRAINER_TRAINED_MODEL_NAME: str = "model.pkl" # file name for trained model
+MODEL_TRAINER_EXPECTED_SCORE: float = 0.6 # expected accuracy score for the model
+MODEL_TRAINER_OVERFITTING_UNDERFITTING_THRESHOLD: float = 0.05 # threshold for overfitting and underfitting
