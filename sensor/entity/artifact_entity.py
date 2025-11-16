@@ -20,3 +20,9 @@ class DataPreprocessingArtifact: # significance - holds file paths for preproces
     preprocessed_object_file_path: str
     processed_train_file_path: str
     processed_test_file_path: str
+
+@dataclass
+class ModelTrainerArtifact: # significance - holds file path for the trained model
+    trained_model_file_path: str
+    train_metric_artifact: ClassificationMetricArtifact
+    test_metric_artifact: ClassificationMetricArtifact
