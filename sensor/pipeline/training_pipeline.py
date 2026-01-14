@@ -19,6 +19,10 @@ from sensor.entity.config_entity import ModelTrainerConfig
 from sensor.entity.artifact_entity import ModelTrainerArtifact
 from sensor.components.model_trainer import ModelTrainer
 
+from sensor.entity.config_entity import ModelEvaluationConfig
+from sensor.entity.artifact_entity import ModelEvaluationArtifact
+from sensor.components.model_evaluation import ModelEvaluation
+
 class TrainPipeline:
     is_pipeline_running=False
     def __init__(self):
@@ -68,5 +72,18 @@ class TrainPipeline:
             )
             model_trainer_artifact = model_trainer.initiate_model_trainer()
             return model_trainer_artifact
+        except Exception as e:
+            raise SensorException(e, sys)
+        
+    def start_model_evaluation(self, data_validation_artifact: DataValidationArtifact, model_trainer_artifact: ModelTrainerArtifact) -> ModelEvaluationArtifact:
+        try:
+            model_evaluation_config = ModelEvaluationConfig(training_pipeline_config=self.training_pipeline_config)
+            model_evaluation = ModelEvaluation(
+                model_eval_config=model_evaluation_config,
+                data_validation_artifact=data_validation_artifact,
+                model_trainer_artifact=model_trainer_artifact
+            )
+            model_evaluation_artifact = model_evaluation.initiate_model_evaluation()
+            return model_evaluation_artifact
         except Exception as e:
             raise SensorException(e, sys)
