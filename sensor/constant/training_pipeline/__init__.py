@@ -8,14 +8,15 @@ By defining constants in one place, it promotes consistency and makes it easier 
 """
 
 # General constants defined here
-FILE_NAME: str = 'sensor.csv'
 TARGET_COLUMN = "class"
+FILE_NAME: str = 'sensor.csv'
 PIPELINE_NAME: str = "sensor" # Name of the main pipeline folder
 
 # Define the common file name for all the stages
 TRAIN_FILE_NAME: str = "train.csv"
 TEST_FILE_NAME: str = "test.csv"
 
+SAVED_MODEL_DIR: str = "saved_models" # folder name where all the saved models will be stored
 MODEL_FILE_NAME = "model.pkl" # Name of the model file name
 
 

@@ -39,6 +39,6 @@ class ModelEvaluationArtifact: # significance - holds evaluation status and repo
     improved_accuracy: float
     best_model_path: str
     trained_model_path: str
-    train_model_metric_artifact: ClassificationMetricArtifact
-    test_model_metric_artifact: ClassificationMetricArtifact
-    
+    trained_model_metric_artifact: ClassificationMetricArtifact
+    challenger_model_metric_artifact: ClassificationMetricArtifact
+
