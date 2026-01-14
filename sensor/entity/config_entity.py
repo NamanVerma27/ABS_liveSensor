@@ -5,6 +5,7 @@ from sensor.constant.training_pipeline import PIPELINE_NAME , ARTIFACT_DIR , DAT
 from sensor.constant.training_pipeline import DATA_VALIDATION_DIR_NAME , DATA_VALIDATION_VALID_DIR , DATA_VALIDATION_INVALID_DIR , DATA_VALIDATION_DRIFT_REPORT_DIR , DATA_VALIDATION_DRIFT_REPORT_FILE_NAME
 from sensor.constant.training_pipeline import DATA_PREPROCESSING_DIR_NAME , DATA_PREPROCESSING_PROCESSED_DATA_DIR , DATA_PREPROCESSING_PROCESSED_OBJECT_DIR , PREPROCESSING_OBJECT_FILE_NAME
 from sensor.constant.training_pipeline import MODEL_TRAINER_DIR_NAME , MODEL_TRAINER_TRAINED_MODEL_DIR , MODEL_TRAINER_TRAINED_MODEL_NAME , MODEL_TRAINER_EXPECTED_SCORE , MODEL_TRAINER_OVERFITTING_UNDERFITTING_THRESHOLD
+from sensor.constant.training_pipeline import MODEL_EVALUATION_DIR_NAME , MODEL_EVALUATION_REPORT_NAME , MODEL_EVALUATION_THRESHOLD_SCORE
 
 from sensor.exception import SensorException
 
@@ -74,3 +75,10 @@ class ModelTrainerConfig:
 
     except Exception as e:
         raise SensorException(e , sys)
+    
+class ModelEvaluationConfig:
+    try:
+        def __init__(self , training_pipeline_config : TrainingPipelineConfig):
+            self.model_evaluation_dir = os.path.join(training_pipeline_config.artifact_dir , MODEL_EVALUATION_DIR_NAME)
+            self.report_file_path = os.path.join(self.model_evaluation_dir , MODEL_EVALUATION_REPORT_NAME)
+            self.change_threshold = MODEL_EVALUATION_THRESHOLD_SCORE
