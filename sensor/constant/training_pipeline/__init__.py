@@ -7,21 +7,22 @@ By defining constants in one place, it promotes consistency and makes it easier 
 
 """
 
-# Define all the constant variables here
+# General constants defined here
 FILE_NAME: str = 'sensor.csv'
 TARGET_COLUMN = "class"
 PIPELINE_NAME: str = "sensor" # Name of the main pipeline folder
-ARTIFACT_DIR: str = "artifact"  # folder name where all the artifacts will be stored
 
 # Define the common file name for all the stages
 TRAIN_FILE_NAME: str = "train.csv"
 TEST_FILE_NAME: str = "test.csv"
 
-PREPROCESSING_OBJECT_FILE_NAME = "preprocessing.pkl" # Name of the preprocessor object file name
 MODEL_FILE_NAME = "model.pkl" # Name of the model file name
-SCHEMA_FILE_PATH = os.path.join("config" , "schema.yaml") # Path of the schema file
-SCHEMA_DROP_COLS = "drop_columns" # columns to be dropped during data cleaning
 
+
+
+ARTIFACT_DIR: str = "artifact"  # folder name where all the artifacts will be stored
+
+SCHEMA_FILE_PATH = os.path.join("config" , "schema.yaml") # Path of the schema file
 # Data Ingestion related constant start with DATA_INGESTION VARIBLEs
 DATA_INGESTION_COLLECTION_NAME: str = "sensor_data" # collection name in mongodb
 DATA_INGESTION_DIR_NAME: str = "data_ingestion" # folder name for data ingestion
@@ -40,6 +41,7 @@ DATA_VALIDATION_DRIFT_REPORT_FILE_NAME: str = "report.yaml" # file name for drif
 DATA_PREPROCESSING_DIR_NAME: str = "data_preprocessing" # folder name for data preprocessing
 DATA_PREPROCESSING_PROCESSED_DATA_DIR: str = "processed_data" # folder name for processed data
 DATA_PREPROCESSING_PROCESSED_OBJECT_DIR: str = "preprocessing_object" # folder name for preprocessor object
+PREPROCESSING_OBJECT_FILE_NAME = "preprocessor.pkl" # Name of the preprocessor object file name
 
 # Model Trainer related constant start with MODEL_TRAINER VARIBLEs
 MODEL_TRAINER_DIR_NAME: str = "model_trainer" # folder name for model trainer

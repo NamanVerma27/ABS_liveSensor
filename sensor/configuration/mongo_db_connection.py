@@ -1,37 +1,41 @@
-import os , sys
-import logging
-from dotenv import load_dotenv
+import os, sys
 import pymongo
-
 import certifi
-ca = certifi.where() # to handle SSL certificate verification
 
 from sensor.exception import SensorException
-from sensor.constant.env_variable import MONGODB_URL_KEY
-from sensor.constant.database import DATABASE_NAME  , COLLECTION_NAME
+from sensor.logger import logging
 
-load_dotenv() # load the environment variables from .env file
+import logging
+logger = logging.getLogger(__name__)
+
+from sensor.constant.env_variable import MONGODB_URL_KEY
+from sensor.constant.database import DATABASE_NAME
+
+ca = certifi.where()
 
 class MongoDBClient:
-    Client = None # ensures only one connection is made to the database
+    """
+    Class to establish a secure, singleton connection to MongoDB.
+    """
+    client = None  # Class-level variable to ensure a single connection
 
-    try:
-        def __init__(self , database_name = DATABASE_NAME , collection_name = COLLECTION_NAME): 
-            if MongoDBClient.Client is None:
-                self.mongodb_url = os.getenv(MONGODB_URL_KEY)
-                logging.info("Retrieved MongoDB URL from environment variables.")
+    def __init__(self, database_name=DATABASE_NAME):
+        try:
+            if MongoDBClient.client is None:
+                mongo_db_url = os.getenv(MONGODB_URL_KEY)
+                if mongo_db_url is None:
+                    raise Exception(f"Environment variable {MONGODB_URL_KEY} is not set.")
+                
+                # Check for secure connection vs localhost
+                if "localhost" in mongo_db_url:
+                    MongoDBClient.client = pymongo.MongoClient(mongo_db_url)
+                else:
+                    MongoDBClient.client = pymongo.MongoClient(mongo_db_url, tlsCAFile=ca)
             
-            if self.mongodb_url is None:
-                raise Exception(f"{MONGODB_URL_KEY} is not set in environment variables.")
-            
-            if "localhost" in self.mongodb_url:
-                self.client = pymongo.MongoClient(self.mongodb_url)
-            else:
-                self.client = pymongo.MongoClient(self.mongodb_url , tlsCAFile=ca) # for secure connection
-
+            self.client = MongoDBClient.client
             self.database = self.client[database_name]
-            self.collection = self.database[collection_name]
-            logging.info(f"Connected to MongoDB database: {database_name}, collection: {collection_name}")
-    
-    except Exception as e:
-        raise SensorException(e , sys)
+            self.database_name = database_name
+            logger.info(f"Successfully connected to database: {self.database_name}")
+            
+        except Exception as e:
+            raise SensorException(e, sys)

@@ -8,6 +8,8 @@ from sklearn.metrics import f1_score,precision_score,recall_score
 
 
 def get_classification_score(y_true,y_pred)->ClassificationMetricArtifact:
+    """ Calculates classification metrics: F1 score, precision, and recall and 
+    returns them in a ClassificationMetricArtifact"""
     try:
         model_f1_score = f1_score(y_true, y_pred)
         model_recall_score = recall_score(y_true, y_pred)

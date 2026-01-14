@@ -3,8 +3,13 @@ import os, sys
 from pandas import DataFrame
 from sklearn.model_selection import train_test_split
 
-from sensor.logger import logging
+
+from sensor.logger import logging as global_logging # Keep the config import
 from sensor.exception import SensorException
+
+# Initialize a named logger for THIS specific module
+import logging
+logger = logging.getLogger(__name__)
 
 from sensor.utils.main_utils import read_yaml_file, write_yaml_file
 from sensor.constant.training_pipeline import SCHEMA_FILE_PATH, SCHEMA_DROP_COLS
@@ -27,6 +32,7 @@ class DataIngestion:
     def __init__(self, data_ingestion_config: DataIngestionConfig):
         try:
             self.data_ingestion_config = data_ingestion_config
+            self._schema_config = read_yaml_file(SCHEMA_FILE_PATH)
         
         except Exception as e:
             raise SensorException(e, sys)
@@ -37,7 +43,7 @@ class DataIngestion:
         Returns the extracted DataFrame for further processing.
         """
         try:
-            logging.info("Exporting data from MongoDB to feature store")
+            logger.info("Exporting data from MongoDB to feature store")
 
             # Create a SensorData object to interact with MongoDB
             sensor_data = SensorData()
@@ -56,7 +62,7 @@ class DataIngestion:
             # Save the data to CSV
             dataframe.to_csv(feature_store_file_path, index=False, header=True)
 
-            logging.info("Data successfully exported to feature store")
+            logger.info("Data successfully exported to feature store")
             return dataframe
 
         except Exception as e:
@@ -67,7 +73,7 @@ class DataIngestion:
         Step 2: Split the dataset into training and testing sets and save them as CSV files.
         """
         try:
-            logging.info("Splitting data into train and test sets")
+            logger.info("Splitting data into train and test sets")
 
             # Split data using sklearn utility (deterministic via random_state)
             train_set, test_set = train_test_split(
@@ -89,7 +95,7 @@ class DataIngestion:
             train_set.to_csv(train_file_path, index=False, header=True)
             test_set.to_csv(test_file_path, index=False, header=True)
 
-            logging.info("Successfully split and saved the data into train and test files")
+            logger.info("Successfully split and saved the data into train and test files")
 
         except Exception as e:
             raise SensorException(e, sys)
@@ -108,8 +114,8 @@ class DataIngestion:
 
             # --- Step 2: Drop columns defined in schema constants ---
             # Using errors='ignore' ensures it won’t crash if a column doesn’t exist
-            dataframe.drop(SCHEMA_DROP_COLS, axis=1, inplace=True, errors='ignore')
-            logging.info(f"Dropped unnecessary columns: {SCHEMA_DROP_COLS}")
+            dataframe = dataframe.drop(self._schema_config["drop_columns"],axis=1)
+            logger.info(f"Dropped unnecessary columns: {SCHEMA_DROP_COLS}")
 
             # --- Step 3: Split into training and testing sets ---
             self.split_data_as_train_test(dataframe=dataframe)
@@ -120,7 +126,7 @@ class DataIngestion:
                 test_file_path=self.data_ingestion_config.test_file_path
             )
 
-            logging.info(f"Data ingestion completed successfully. Artifact: {data_ingestion_artifact}")
+            logger.info(f"Data ingestion completed successfully. Artifact: {data_ingestion_artifact}")
 
             # --- Step 5: Return the artifact for the next pipeline stage ---
             return data_ingestion_artifact

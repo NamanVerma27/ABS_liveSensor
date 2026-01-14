@@ -1,9 +1,11 @@
 from datetime import datetime
 import os , sys
+
 from sensor.constant.training_pipeline import PIPELINE_NAME , ARTIFACT_DIR , DATA_INGESTION_DIR_NAME , FILE_NAME , DATA_INGESTION_FEATURE_STORE_DIR , DATA_INGESTION_INGESTED_DIR , TEST_FILE_NAME , DATA_INGESTION_COLLECTION_NAME , TRAIN_FILE_NAME , DATA_INGESTION_TRAIN_TEST_SPLIT_RATION
 from sensor.constant.training_pipeline import DATA_VALIDATION_DIR_NAME , DATA_VALIDATION_VALID_DIR , DATA_VALIDATION_INVALID_DIR , DATA_VALIDATION_DRIFT_REPORT_DIR , DATA_VALIDATION_DRIFT_REPORT_FILE_NAME
-from sensor.constant.training_pipeline import DATA_PREPROCESSING_DIR_NAME , DATA_PREPROCESSING_PROCESSED_DATA_DIR , DATA_PREPROCESSING_PROCESSED_OBJECT_DIR
+from sensor.constant.training_pipeline import DATA_PREPROCESSING_DIR_NAME , DATA_PREPROCESSING_PROCESSED_DATA_DIR , DATA_PREPROCESSING_PROCESSED_OBJECT_DIR , PREPROCESSING_OBJECT_FILE_NAME
 from sensor.constant.training_pipeline import MODEL_TRAINER_DIR_NAME , MODEL_TRAINER_TRAINED_MODEL_DIR , MODEL_TRAINER_TRAINED_MODEL_NAME , MODEL_TRAINER_EXPECTED_SCORE , MODEL_TRAINER_OVERFITTING_UNDERFITTING_THRESHOLD
+
 from sensor.exception import SensorException
 
 class TrainingPipelineConfig:
@@ -53,9 +55,10 @@ class DataPreprocessingConfig:
         def __init__(self , training_pipeline_config : TrainingPipelineConfig):
             self.data_preprocessing_dir = os.path.join(training_pipeline_config.artifact_dir , DATA_PREPROCESSING_DIR_NAME)
             self.processed_data_dir =  os.path.join(self.data_preprocessing_dir , DATA_PREPROCESSING_PROCESSED_DATA_DIR)
-            self.processed_train_file_path = os.path.join(self.processed_data_dir , TRAIN_FILE_NAME.repace(".csv" , ".npy"))
-            self.processed_test_file_path = os.path.join(self.processed_data_dir , TEST_FILE_NAME.repace(".csv" , ".npy"))
+            self.processed_train_file_path = os.path.join(self.processed_data_dir , TRAIN_FILE_NAME.replace(".csv" , ".npy"))
+            self.processed_test_file_path = os.path.join(self.processed_data_dir , TEST_FILE_NAME.replace(".csv" , ".npy"))
             self.preprocessed_object_dir = os.path.join(self.data_preprocessing_dir , DATA_PREPROCESSING_PROCESSED_OBJECT_DIR)
+            self.preprocessed_object_file_path = os.path.join(self.preprocessed_object_dir , PREPROCESSING_OBJECT_FILE_NAME)
 
     except Exception as e:
         raise SensorException(e , sys)

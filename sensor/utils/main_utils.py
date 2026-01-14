@@ -4,8 +4,11 @@ import dill
 import numpy as np
 import yaml
 
-from sensor.logger import logging
+from sensor.logger import logging as global_logging
 from sensor.exception import SensorException
+
+import logging
+logger = logging.getLogger(__name__)
 
 def read_yaml_file(file_path: str) -> dict:
     
