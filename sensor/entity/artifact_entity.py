@@ -32,3 +32,13 @@ class ModelTrainerArtifact: # significance - holds file path for the trained mod
     trained_model_file_path: str
     train_metric_artifact: ClassificationMetricArtifact
     test_metric_artifact: ClassificationMetricArtifact
+
+@dataclass
+class ModelEvaluationArtifact: # significance - holds evaluation status and report file path
+    is_model_accepted: bool
+    improved_accuracy: float
+    best_model_path: str
+    trained_model_path: str
+    train_model_metric_artifact: ClassificationMetricArtifact
+    test_model_metric_artifact: ClassificationMetricArtifact
+    
