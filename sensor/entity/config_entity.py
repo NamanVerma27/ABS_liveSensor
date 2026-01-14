@@ -82,3 +82,6 @@ class ModelEvaluationConfig:
             self.model_evaluation_dir = os.path.join(training_pipeline_config.artifact_dir , MODEL_EVALUATION_DIR_NAME)
             self.report_file_path = os.path.join(self.model_evaluation_dir , MODEL_EVALUATION_REPORT_NAME)
             self.change_threshold = MODEL_EVALUATION_THRESHOLD_SCORE
+
+    except Exception as e:
+        raise SensorException(e , sys)
