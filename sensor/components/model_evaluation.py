@@ -91,8 +91,8 @@ class ModelEvaluation:
             model_evaluation_artifact = ModelEvaluationArtifact(
                 is_model_accepted=is_model_accepted,
                 improved_accuracy=improved_accuracy,
-                best_model_path=best_model_path,
-                trained_model_path=trained_model_path,
+                best_model_path=best_model_path, # Path to the Champion model - the previous best
+                trained_model_path=trained_model_path, # Path to the Challenger model - the newly trained
                 trained_model_metric_artifact=trained_metric,
                 challenger_model_metric_artifact=best_metric
             )
