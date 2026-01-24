@@ -1,19 +1,20 @@
-from sensor.exception import SensorException
-from sensor.logger import logging as global_logging
-logger = global_logging.getLogger(__name__)
-from sensor.entity.artifact_entity import ModelPusherArtifact , ModelEvaluationArtifact , ModelTrainerArtifact
-from sensor.entity.config_entity import ModelPusherConfig
 import os,sys
-
 import shutil
+
+from sensor.logger import logging as global_logging
+from sensor.exception import SensorException
+logger = global_logging.getLogger(__name__)
+
+from sensor.entity.config_entity import ModelPusherConfig
+from sensor.entity.artifact_entity import(ModelPusherArtifact , 
+                                          ModelEvaluationArtifact
+                                          )
 
 class ModelPusher:
     def __init__(self , model_pusher_config : ModelPusherConfig ,
-                model_trainer_artifact : ModelTrainerArtifact,
                 model_evaluation_artifact : ModelEvaluationArtifact):
             try:
                 self.model_pusher_config = model_pusher_config
-                self.model_trainer_artifact = model_trainer_artifact
                 self.model_evaluation_artifact = model_evaluation_artifact
             except Exception as e:
                 raise SensorException(e , sys)
