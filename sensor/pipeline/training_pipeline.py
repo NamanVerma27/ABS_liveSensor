@@ -23,6 +23,10 @@ from sensor.entity.config_entity import ModelEvaluationConfig
 from sensor.entity.artifact_entity import ModelEvaluationArtifact
 from sensor.components.model_evaluation import ModelEvaluation
 
+from sensor.entity.config_entity import ModelPusherConfig
+from sensor.entity.artifact_entity import ModelPusherArtifact
+from sensor.components.model_pusher import ModelPusher
+
 class TrainPipeline:
     is_pipeline_running=False
     def __init__(self):
@@ -87,3 +91,17 @@ class TrainPipeline:
             return model_evaluation_artifact
         except Exception as e:
             raise SensorException(e, sys)
+        
+    def start_model_pusher(self, model_evaluation_artifact: ModelEvaluationArtifact) -> ModelPusherArtifact:
+        try:
+            model_pusher_config = ModelPusherConfig(training_pipeline_config=self.training_pipeline_config)
+            model_pusher = ModelPusher(
+                model_pusher_config=model_pusher_config,
+                model_evaluation_artifact=model_evaluation_artifact
+            )
+            model_pusher_artifact = model_pusher.initiate_model_pusher()
+            return model_pusher_artifact
+        except Exception as e:
+            raise SensorException(e, sys)
+        
+    
