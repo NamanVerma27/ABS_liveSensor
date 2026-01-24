@@ -6,6 +6,7 @@ from sensor.constant.training_pipeline import DATA_VALIDATION_DIR_NAME , DATA_VA
 from sensor.constant.training_pipeline import DATA_PREPROCESSING_DIR_NAME , DATA_PREPROCESSING_PROCESSED_DATA_DIR , DATA_PREPROCESSING_PROCESSED_OBJECT_DIR , PREPROCESSING_OBJECT_FILE_NAME
 from sensor.constant.training_pipeline import MODEL_TRAINER_DIR_NAME , MODEL_TRAINER_TRAINED_MODEL_DIR , MODEL_TRAINER_TRAINED_MODEL_NAME , MODEL_TRAINER_EXPECTED_SCORE , MODEL_TRAINER_OVERFITTING_UNDERFITTING_THRESHOLD
 from sensor.constant.training_pipeline import MODEL_EVALUATION_DIR_NAME , MODEL_EVALUATION_REPORT_NAME , MODEL_EVALUATION_THRESHOLD_SCORE
+from sensor.constant.training_pipeline import MODEL_PUSHER_DIR_NAME , SAVED_MODEL_DIR , MODEL_FILE_NAME
 
 from sensor.exception import SensorException
 
@@ -82,6 +83,17 @@ class ModelEvaluationConfig:
             self.model_evaluation_dir = os.path.join(training_pipeline_config.artifact_dir , MODEL_EVALUATION_DIR_NAME)
             self.report_file_path = os.path.join(self.model_evaluation_dir , MODEL_EVALUATION_REPORT_NAME)
             self.change_threshold = MODEL_EVALUATION_THRESHOLD_SCORE
+
+    except Exception as e:
+        raise SensorException(e , sys)
+    
+class ModelPusherConfig:
+    try:
+        def __init__(self , training_pipeline_config : TrainingPipelineConfig):
+            self.model_pusher_dir = os.path.join(training_pipeline_config.artifact_dir , MODEL_PUSHER_DIR_NAME)
+            self.saved_model_dir = os.path.join(self.model_pusher_dir , SAVED_MODEL_DIR)
+            timestamp = round(datetime.now().timestamp())
+            self.model_file_path = os.path.join(self.saved_model_dir , f"{timestamp}" , MODEL_FILE_NAME)
 
     except Exception as e:
         raise SensorException(e , sys)

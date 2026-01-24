@@ -42,3 +42,7 @@ class ModelEvaluationArtifact: # significance - holds evaluation status and repo
     trained_model_metric_artifact: ClassificationMetricArtifact
     challenger_model_metric_artifact: ClassificationMetricArtifact
 
+@dataclass
+class ModelPusherArtifact: # significance - holds file paths for the pushed model and its directory
+    saved_model_path: str
+    model_file_path: str
