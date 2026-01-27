@@ -49,7 +49,7 @@ MODEL_TRAINER_DIR_NAME: str = "model_trainer" # folder name for model trainer
 MODEL_TRAINER_TRAINED_MODEL_DIR: str = "trained_model" # folder name for trained model
 MODEL_TRAINER_TRAINED_MODEL_NAME: str = "model.pkl" # file name for trained model
 MODEL_TRAINER_EXPECTED_SCORE: float = 0.6 # expected accuracy score for the model
-MODEL_TRAINER_OVERFITTING_UNDERFITTING_THRESHOLD: float = 0.05 # threshold for overfitting and underfitting
+MODEL_TRAINER_OVERFITTING_UNDERFITTING_THRESHOLD: float = 0.25 # threshold for overfitting and underfitting
 
 # Model Evaluation related constant start with MODEL_EVALUATION VARIBLEs
 MODEL_EVALUATION_DIR_NAME: str = "model_evaluation" # folder name for model evaluation

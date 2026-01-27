@@ -99,7 +99,7 @@ class ModelTrainer:
 
             # Then, train the final model with those parameters
             logger.info("Training the final model with best hyperparameters")
-            model = self.train_model(x_train , y_train, best_params=best_params) # if we want to use default params , just set best_params = None
+            model = self.train_model(x_train , y_train, best_params=None) # if we want to use default params , just set best_params = None
 
             #------4. Calculate training and testing accuracy------
             logger.info("Calculating training and testing accuracy")
