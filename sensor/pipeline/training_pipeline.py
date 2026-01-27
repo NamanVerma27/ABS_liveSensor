@@ -5,7 +5,7 @@ from sensor.logger import logging
 
 from sensor.entity.config_entity import TrainingPipelineConfig , DataIngestionConfig
 from sensor.entity.artifact_entity import DataIngestionArtifact
-from sensor.components.data_ingestion import DataIngesion
+from sensor.components.data_ingestion import DataIngestion
 
 from sensor.entity.config_entity import DataValidationConfig
 from sensor.entity.artifact_entity import DataValidationArtifact
@@ -29,6 +29,7 @@ from sensor.components.model_pusher import ModelPusher
 
 class TrainPipeline:
     is_pipeline_running=False
+
     def __init__(self):
         self.training_pipeline_config = TrainingPipelineConfig()
 
@@ -36,7 +37,7 @@ class TrainPipeline:
         try:
             self.data_ingestion_config = DataIngestionConfig(training_pipeline_config=self.training_pipeline_config)
             logging.info("Starting data ingestion")
-            data_ingestion = DataIngesion(data_ingestion_config=self.data_ingestion_config)
+            data_ingestion = DataIngestion(data_ingestion_config=self.data_ingestion_config)
             data_ingestion_artifact = data_ingestion.initiate_data_ingestion()
             logging.info(f"Data ingestion completed and artifact: {data_ingestion_artifact}")
             return data_ingestion_artifact
@@ -104,4 +105,25 @@ class TrainPipeline:
         except Exception as e:
             raise SensorException(e, sys)
         
-    
+    def run_pipeline(self):
+        try:
+            TrainPipeline.is_pipeline_running = True
+            data_ingestion_artifact = self.start_data_ingestion()
+            data_validation_artifact = self.start_data_validaton(data_ingestion_artifact=data_ingestion_artifact)
+            data_preprocessing_artifact = self.start_data_preprocessing(data_validation_artifact=data_validation_artifact)
+            model_trainer_artifact = self.start_model_trainer(data_preprocessing_artifact=data_preprocessing_artifact)
+            model_evaluation_artifact = self.start_model_evaluation(
+                data_validation_artifact=data_validation_artifact,
+                model_trainer_artifact=model_trainer_artifact
+            )
+
+            if model_evaluation_artifact.is_model_accepted:
+                model_pusher_artifact = self.start_model_pusher(model_evaluation_artifact=model_evaluation_artifact)
+                logging.info(f"Model pusher artifact: {model_pusher_artifact}")
+            else:
+                logging.info("Trained model rejected.")
+
+        except Exception as e:
+            raise SensorException(e, sys)
+        finally:
+            TrainPipeline.is_pipeline_running = False # Reset the flag
