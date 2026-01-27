@@ -122,7 +122,7 @@ class DataIngestion:
 
             # --- Step 4: Create a DataIngestionArtifact to store metadata paths ---
             data_ingestion_artifact = DataIngestionArtifact(
-                train_file_path=self.data_ingestion_config.train_file_path,
+                training_file_path=self.data_ingestion_config.train_file_path,
                 test_file_path=self.data_ingestion_config.test_file_path
             )
 

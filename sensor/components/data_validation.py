@@ -30,7 +30,7 @@ class DataValidation:
     @staticmethod
     def read_data(file_path) -> pd.DataFrame:
         try:
-            return pd.read_csv(file_path)
+            return pd.read_csv(file_path, na_values="na")
         except Exception as e:
             raise SensorException(e, sys)
 

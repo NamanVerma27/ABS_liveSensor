@@ -82,8 +82,8 @@ class ModelTrainer:
             # ------1. Load transformed training and testing arrays------
             logger.info("Loading transformed training and testing arrays")
 
-            train_file_path = self.data_transformation_artifact.transformed_train_file_path
-            test_file_path = self.data_transformation_artifact.transformed_test_file_path
+            train_file_path = self.data_transformation_artifact.processed_train_file_path
+            test_file_path = self.data_transformation_artifact.processed_test_file_path
 
             train_arr = load_numpy_array_data(train_file_path)
             test_arr = load_numpy_array_data(test_file_path)

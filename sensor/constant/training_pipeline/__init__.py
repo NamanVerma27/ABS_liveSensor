@@ -19,7 +19,7 @@ TEST_FILE_NAME: str = "test.csv"
 SAVED_MODEL_DIR: str = "saved_models" # folder name where all the saved models will be stored
 MODEL_FILE_NAME = "model.pkl" # Name of the model file name
 
-
+SCHEMA_DROP_COLS = "drop_columns"
 
 ARTIFACT_DIR: str = "artifact"  # folder name where all the artifacts will be stored
 
